@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.pdfbox.ExtractText;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 
 import com.jatinst.money.visualizer.exception.ReaderException;
+import com.jatinst.money.visualizer.exception.StmtParserException;
 import com.jatinst.money.visualizer.model.RawTransactionMessage;
 import com.jatinst.money.visualizer.reader.api.RawTransFileReader;
 import com.jatinst.money.visualizer.reader.api.RawTransactionListener;
@@ -23,14 +23,14 @@ import com.jatinst.money.visualizer.reader.api.TransactionParser;
  * Uses the Apache PDFBox, most code is based on http://thottingal.in/blog/2009/06/24/pdfbox-extract-text-from-pdf/ as
  * well as other tutorials The logic to read bank statements is custom
  */
-public class PDFReader implements RawTransFileReader {
-	private static final Logger logger = Logger.getLogger(PDFReader.class);
+public class PDFStmtReader implements RawTransFileReader {
+	private static final Logger logger = Logger.getLogger(PDFStmtReader.class);
 
 	//Using composition here, the parser can change as needed
 	private TransactionParser transParser = new WellsFargoParser();
 	
 	@Override
-	public List<RawTransactionMessage> loadTransactions(String filePath) throws ReaderException {
+	public List<RawTransactionMessage> loadTransactions(String filePath) throws ReaderException, StmtParserException {
 
 		File file = new File(filePath);
 		if (!file.isFile()) {
@@ -103,13 +103,13 @@ public class PDFReader implements RawTransFileReader {
 		 * logger.info("Got back the text from pdf as:"); logger.info(pdfText);
 		 */
 
-/*		PDFReader reader = new PDFReader();
+		PDFStmtReader reader = new PDFStmtReader();
 
-		reader.loadTransactions(testFile);*/
+		reader.loadTransactions(testFile);
 		
 		//this is ugly, but I am just testing...
-		String[] args1 = new String[] {"-html", "src/test/resources/jan-2014.pdf", "1.html"};
-		ExtractText.main(args1);
+/*		String[] args1 = new String[] {"-html", "src/test/resources/jan-2014.pdf", "1.html"};
+		ExtractText.main(args1);*/
 	}
 
 	@SuppressWarnings("unused")

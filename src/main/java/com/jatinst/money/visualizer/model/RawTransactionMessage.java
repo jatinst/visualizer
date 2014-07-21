@@ -6,20 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class with some basic fields that every statement message has Also has an
- * extras map to handle custom key-value pairs
+ * Class with some basic fields that every statement message has Also has an extras map to handle custom key-value pairs
  */
 public class RawTransactionMessage {
+	public enum Type {
+		ADDITION, SUBTRACTION;
+	}
+
 	private final Date transdate;
 	private final BigDecimal transAmount;
 	private final String transDescription;
+	private final Type transType;
 	private Map<String, Object> extras;
 
-	public RawTransactionMessage(Date transdate, BigDecimal transAmount,
-			String transDescription) {
+	public RawTransactionMessage(Date transdate, BigDecimal transAmount, String transDescription, Type transType) {
 		this.transdate = transdate;
 		this.transAmount = transAmount;
 		this.transDescription = transDescription;
+		this.transType = transType;
 	}
 
 	public Date getTransdate() {
@@ -36,8 +40,11 @@ public class RawTransactionMessage {
 
 	/**
 	 * Add extra fields that are not standard in a raw transaction read from the file
-	 * @param extraKey the name of the extra field
-	 * @param extraValue the value of the extra field
+	 * 
+	 * @param extraKey
+	 *            the name of the extra field
+	 * @param extraValue
+	 *            the value of the extra field
 	 */
 	public void addExtra(String extraKey, Object extraValue) {
 		if (extras == null) { // create the map if it does not exist
@@ -48,7 +55,8 @@ public class RawTransactionMessage {
 
 	/**
 	 * 
-	 * @param extraKey the key for the extra
+	 * @param extraKey
+	 *            the key for the extra
 	 * @return the value for the given extraKey, or null if none exists for that key
 	 */
 	public Object getExtra(String extraKey) {
@@ -60,6 +68,10 @@ public class RawTransactionMessage {
 	 */
 	public Map<String, Object> getExtras() {
 		return extras;
+	}
+
+	public Type getTransType() {
+		return transType;
 	}
 
 }
